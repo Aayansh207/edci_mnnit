@@ -5,6 +5,5 @@
 /.next/
 /out/
 
-# env files (NEVER commit secrets)
 .env
 .env.local
