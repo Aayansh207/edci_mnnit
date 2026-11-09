@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: edci-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-edci_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-development_password}
+      POSTGRES_DB: ${POSTGRES_DB:-edci_mnnit}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - edci_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-edci_user} -d ${POSTGRES_DB:-edci_mnnit}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edci-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-edci_user}:${POSTGRES_PASSWORD:-development_password}@db:5432/${POSTGRES_DB:-edci_mnnit}?schema=public
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  edci_postgres_data:
+    name: edci_postgres_data
