@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.10.1",
   "engineVersion": "d1b3f377ca835d73fd50954a5e22128b9ebdd6b8",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\n/// Verification model to test and validate database connectivity and migrations.\nmodel SystemCheck {\n  id        String   @id @default(uuid())\n  status    String   @default(\"ok\")\n  checkedAt DateTime @default(now())\n\n  @@map(\"system_checks\")\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel SystemCheck {\n  id        String   @id @default(uuid())\n  status    String   @default(\"ok\")\n  checkedAt DateTime @default(now())\n\n  @@map(\"system_checks\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},

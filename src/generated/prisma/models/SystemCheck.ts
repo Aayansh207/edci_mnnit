@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model SystemCheck
- * Verification model to test and validate database connectivity and migrations.
+ * 
  */
 export type SystemCheckModel = runtime.Types.Result.DefaultSelection<Prisma.$SystemCheckPayload>
 

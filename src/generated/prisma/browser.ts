@@ -19,6 +19,6 @@ export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
  * Model SystemCheck
- * Verification model to test and validate database connectivity and migrations.
+ * 
  */
 export type SystemCheck = Prisma.SystemCheckModel
