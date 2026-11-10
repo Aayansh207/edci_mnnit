@@ -1,7 +1,6 @@
 
 import SplitText from "@/components/SplitText";
 import GradientWaves from "@/components/GradientWaves";
-import PublicFooter from "@/components/layout/public-footer";
 
 export default function HomePage() {
   return (
@@ -61,6 +60,7 @@ export default function HomePage() {
       </div>
 
       {/* Footer content */}
+
 
     </div>
   );

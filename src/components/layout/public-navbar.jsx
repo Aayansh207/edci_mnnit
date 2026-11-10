@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function PublicNavbar() {
     return (
@@ -6,12 +7,21 @@ export default function PublicNavbar() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
 
-                    <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-md bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]"></div>
-                        <Link href="/" className="text-xl font-bold tracking-tight text-white">
+                    <Link href="/" className="flex items-center gap-3">
+                        <div className="h-9 w-9 overflow-hidden rounded-md flex items-center justify-center">
+                            <Image
+                                src="/images/edcilogo.jpeg"
+                                alt="EDCI Logo"
+                                width={36}
+                                height={36}
+                                className="h-9 w-9 rounded-md object-contain"
+                                priority
+                            />
+                        </div>
+                        <span className="text-xl font-bold tracking-tight text-white">
                             EDCI
-                        </Link>
-                    </div>
+                        </span>
+                    </Link>
 
                     <div className="hidden md:flex items-center space-x-8 bg-black/90 backdrop-blur-md p-3 rounded-lg">
                         <Link href="/about" className="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
