@@ -1,12 +1,12 @@
 # EDCI Enterprise Website – Technical Blueprint & SRS
 
-**Version:** 1.1 (Compact) | **Scope:** Public Institutional Portal + Multi-Tenant Enterprise Hub | **Team:** 6 Members
+**Version:** 1.2 (JavaScript Edition) | **Scope:** Public Institutional Portal + Multi-Tenant Enterprise Hub | **Team:** 6 Members
 
 ---
 
 ## 1. Project Overview & Boundaries
 
-EDCI requires a unified Next.js application combining a **public institutional website** and a **secure multi-tenant enterprise portal** on a single database, auth engine, and API layer.
+EDCI requires a unified Next.js application combining a **public institutional website** and a **secure multi-tenant enterprise portal** on a single database, auth engine, and API layer, built entirely with modern JavaScript (ES6+ / JSX).
 
 * **[CONFIRMED]:** Public site, role-based dashboards, Clerk auth, PostgreSQL, Gmail API email integration.
 * **[ASSUMPTION]:** Application review workflow, cohort tracking, and standard student/startup self-registration.
@@ -23,12 +23,12 @@ Backend:  Pravesh (Lead/APIs), Prabhat (DB/Auth), Shivam (Bridge), Aayansh (Brid
 
 | Layer | Stack | Purpose & Justification |
 |---|---|---|
-| **Core Framework** | Next.js (App Router, TS) | Unified SSR public pages + client portal + API Route Handlers. |
+| **Core Framework** | Next.js (App Router, JS/JSX) | Unified SSR public pages + client portal + API Route Handlers. |
 | **Styling & UI** | Tailwind CSS + Lucide Icons | Zero CSS bloat, rapid prototyping, unified design tokens. |
 | **State & Fetching** | Zustand + TanStack Query | Zustand for UI state; TanStack Query for caching and API sync. |
-| **Forms & Validation**| React Hook Form + Zod | Shared type-safe schemas across client forms and backend routes. |
+| **Forms & Validation**| React Hook Form + Zod | Shared runtime validation schemas across client forms and backend routes. |
 | **Auth & RBAC** | Clerk Authentication | Managed sessions, social logins, role claims in `publicMetadata`. |
-| **Database & ORM** | PostgreSQL + Prisma ORM | Relational integrity, type-safe queries, automatic migrations. |
+| **Database & ORM** | PostgreSQL + Prisma ORM | Relational integrity, automated migrations, declarative schema querying. |
 | **Email Service** | Google Gmail API (OAuth 2.0) | Official EDCI Workspace mailbox; zero third-party email fees. |
 | **DevOps & Logs** | Vercel + GitHub Actions + Sentry | Edge deployment, automated CI test gates, runtime error tracking. |
 
@@ -97,7 +97,7 @@ FR-26 [CONFIRMED]: Non-blocking execution so email latency never delays user HTT
 * **NFR-03 (Scalability):** DB indexes on all foreign keys; connection pooling via Prisma Accelerate / Neon.
 * **NFR-04 (Availability):** 99.5% uptime targeting backed by Vercel edge deployment.
 * **NFR-05 (Responsiveness):** Mobile-first layouts validated from 375px to 1920px viewports.
-* **NFR-06 (Maintainability):** TypeScript strict mode (`noImplicitAny`); zero unchecked lint warnings.
+* **NFR-06 (Maintainability):** ESLint recommended rules + JSDoc type annotations; zero unchecked lint warnings; modular JavaScript code.
 
 ---
 
@@ -217,28 +217,28 @@ graph LR
 
 ---
 
-## 9. Folder Structure (Next.js App Router)
+## 9. Folder Structure (Next.js App Router - JavaScript)
 
 ```
 src/
 ├── app/
-│   ├── (public)/              # Public pages: page.tsx, about/, programs/, events/, contact/
+│   ├── (public)/              # Public pages: page.jsx, about/, programs/, events/, contact/
 │   ├── (auth)/                # Clerk auth: sign-in/[[...sign-in]]/, sign-up/[[...sign-up]]/
 │   ├── (portal)/              # Authenticated: dashboard/, profile/, organization/, applications/
 │   ├── (admin)/               # Staff/Admin: admin/users/, admin/enquiries/, admin/applications/
 │   ├── api/                   # REST Route Handlers (auth, users, applications, events, enquiries)
-│   └── layout.tsx             # Root layout with ClerkProvider & QueryClient
+│   └── layout.jsx             # Root layout with ClerkProvider & QueryClient
 ├── components/
 │   ├── ui/                    # Primitives: button, input, dialog, table, badge (shadcn/radix)
 │   ├── layout/                # Navbar, footer, portal sidebar, breadcrumbs
 │   └── shared/                # DataTable, stat-card, empty-state
 ├── features/                  # Domain components: applications/, events/, organizations/
-├── hooks/                     # Custom hooks: useCurrentUser, useDebounce
-├── stores/                    # Zustand stores: useSidebarStore, useUIStore
-├── services/                  # Business logic: email/ (gmail-client, templates), audit.ts
-├── lib/                       # Singletons: prisma.ts, utils.ts
-├── validations/               # Shared Zod schemas: application.ts, enquiry.ts, user.ts
-└── types/                     # Shared TypeScript interfaces
+├── hooks/                     # Custom hooks: useCurrentUser.js, useDebounce.js
+├── stores/                    # Zustand stores: useSidebarStore.js, useUIStore.js
+├── services/                  # Business logic: email/ (gmail-client.js, templates), audit.js
+├── lib/                       # Singletons: prisma.js, utils.js
+├── validations/               # Shared Zod schemas: application.js, enquiry.js, user.js
+└── constants/                 # Shared constants & enums: roles.js, status.js, routes.js
 ```
 
 ---
@@ -286,7 +286,7 @@ gantt
 
 * **Branches:** `main` (Production only), `develop` (Integration/Staging), `feat/*` (Features), `fix/*` (Bugs).
 * **PR Policy:** Max 400 lines per PR; mandatory 1 peer review; passing CI check before merge.
-* **CI Checks:** Automated GitHub Actions running `eslint`, `tsc --noEmit`, and `prisma validate`.
+* **CI Checks:** Automated GitHub Actions running `npm run lint` (`eslint`) and `npx prisma validate`.
 * **Commits:** Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`).
 * **Secrets:** Tracked via `.env.example`; production secrets managed in Vercel settings.
 
@@ -296,7 +296,8 @@ gantt
 
 | Risk | Impact | Quick Mitigation |
 |---|---|---|
-| **FE/BE Schema Mismatch** | High | Shared Zod schemas in `validations/` imported by both client forms and API routes. |
+| **FE/BE Schema Mismatch** | High | Shared Zod schemas in `validations/` imported by both client forms and API routes for strict runtime validation. |
+| **Dynamic Type Pitfalls** | Medium | Enforce strict ESLint rules, PropTypes/JSDoc annotations, and centralized constants in `constants/`. |
 | **Privilege Escalation** | Critical | Dual-layer security: Middleware checks routing; API handlers re-verify DB role before mutations. |
 | **Tenant Data Leakage** | Critical | Mandatory `where: { organizationId }` clause on all partner/startup database queries. |
 | **Gmail OAuth Expiry** | Medium | Use official Google token client with persistent refresh token; log dispatch failures gracefully. |
