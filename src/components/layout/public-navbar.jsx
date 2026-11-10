@@ -8,7 +8,7 @@ export default function PublicNavbar() {
 
                     <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-md bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]"></div>
-                        <Link href="/" className="text-xl font-bold tracking-tight text-black">
+                        <Link href="/" className="text-xl font-bold tracking-tight text-white">
                             EDCI
                         </Link>
                     </div>
