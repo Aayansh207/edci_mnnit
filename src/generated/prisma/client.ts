@@ -43,6 +43,6 @@ export { Prisma }
 
 /**
  * Model SystemCheck
- * Verification model to test and validate database connectivity and migrations.
+ * 
  */
 export type SystemCheck = Prisma.SystemCheckModel
