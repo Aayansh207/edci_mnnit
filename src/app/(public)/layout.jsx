@@ -4,7 +4,7 @@ import PublicFooter from "@/components/layout/public-footer";
 
 export default function PublicLayout({ children }) {
   return (
-    <div className="flex min-h-screen flex-col bg-black">
+    <div className="flex min-h-screen flex-col">
       <PublicNavbar />
       <main className="flex-grow">
         {children}
