@@ -1,5 +1,6 @@
 
-import { SignUp } from "@clerk/nextjs";
+
+import SignupWithRole from "@/components/auth/signup-with-role";
 
 export default function SignUpPage() {
   return (
@@ -7,19 +8,11 @@ export default function SignUpPage() {
 
       <div className="w-full max-w-md">
 
-        <h1 className="mb-6 text-center text-2xl font-bold text-white">
-          Join EDCI Enterprise Hub
-        </h1>
-
-        <SignUp
-          routing="path"
-          path="/sign-up"
-          signInUrl="/sign-in"
-          forceRedirectUrl="/dashboard"
-        />
+        <SignupWithRole />
 
       </div>
 
     </main>
   );
 }
+
