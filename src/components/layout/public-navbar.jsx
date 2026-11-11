@@ -1,61 +1,104 @@
+
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 
+import {
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
+
 export default function PublicNavbar() {
-    return (
-        <nav className="sticky top-0 z-50 w-full border-zinc-800 backdrop-blur-md">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+  const { isLoaded, isSignedIn } = useUser();
 
-                    <Link href="/" className="flex items-center gap-3">
-                        <div className="h-9 w-9 overflow-hidden rounded-md flex items-center justify-center">
-                            <Image
-                                src="/images/edcilogo.jpeg"
-                                alt="EDCI Logo"
-                                width={36}
-                                height={36}
-                                className="h-9 w-9 rounded-md object-contain"
-                                priority
-                            />
-                        </div>
-                        <span className="text-xl font-bold tracking-tight text-white">
-                            EDCI
-                        </span>
-                    </Link>
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-black/80 backdrop-blur-md">
 
-                    <div className="hidden md:flex items-center space-x-8 bg-black/90 backdrop-blur-md p-3 rounded-lg">
-                        <Link href="/about" className="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
-                            About
-                        </Link>
-                        <Link href="/programs" className="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
-                            Programs
-                        </Link>
-                        <Link href="/events" className="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
-                            Events
-                        </Link>
-                        <Link href="/contact" className="text-sm font-medium text-zinc-400 transition-colors hover:text-white">
-                            Contact
-                        </Link>
-                    </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                    {/* Call to Action Section (Using Custom Tailwind Classes) */}
-                    <div className="flex items-center space-x-4">
-                        <Link
-                            href="/sign-in"
-                            className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
-                        >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/sign-up"
-                            className="inline-flex h-9 items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium text-black shadow transition-colors hover:bg-zinc-200"
-                        >
-                            Apply Now
-                        </Link>
-                    </div>
+        <div className="flex h-16 items-center justify-between">
 
-                </div>
-            </div>
-        </nav>
-    );
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3">
+
+            <Image
+              src="/images/edcilogo.jpeg"
+              alt="EDCI Logo"
+              width={36}
+              height={36}
+              className="rounded-md object-contain"
+            />
+
+            <span className="text-xl font-bold text-white">
+              EDCI
+            </span>
+
+          </Link>
+
+          {/* Navigation */}
+          <div className="hidden items-center space-x-8 md:flex">
+
+            <Link href="/about" className="text-zinc-400 hover:text-white">
+              About
+            </Link>
+
+            <Link href="/programs" className="text-zinc-400 hover:text-white">
+              Programs
+            </Link>
+
+            <Link href="/events" className="text-zinc-400 hover:text-white">
+              Events
+            </Link>
+
+            <Link href="/contact" className="text-zinc-400 hover:text-white">
+              Contact
+            </Link>
+
+          </div>
+
+          {/* Authentication */}
+          <div className="flex items-center gap-4">
+
+            {isLoaded && isSignedIn ? (
+
+              <>
+                <Link
+                  href="/dashboard"
+                  className="rounded-md px-4 py-2 text-sm text-white hover:bg-zinc-800"
+                >
+                  Dashboard
+                </Link>
+
+                <UserButton afterSignOutUrl="/" />
+              </>
+
+            ) : isLoaded ? (
+
+              <>
+                <Link
+                  href="/sign-in"
+                  className="text-zinc-400 hover:text-white"
+                >
+                  Sign In
+                </Link>
+
+                <Link
+                  href="/sign-up"
+                  className="rounded-md bg-white px-4 py-2 text-sm font-medium text-black"
+                >
+                  Apply Now
+                </Link>
+              </>
+
+            ) : null}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </nav>
+  );
 }
