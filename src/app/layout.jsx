@@ -1,4 +1,6 @@
+
 import "./global.css";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
   title: "EDCI Enterprise Hub",
@@ -9,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="antialiased bg-black text-slate-900 min-h-screen font-sans">
-        {children}
+        <ClerkProvider>
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
